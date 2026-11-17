@@ -1,0 +1,16 @@
+{
+  "name": "ahla-apprendre-libanais",
+  "version": "0.1.0",
+  "description": "Ahla : application web personnelle pour apprendre le libanais parlé (expressions, révision espacée, prononciation, mini-dialogues).",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Mathieu Negre",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

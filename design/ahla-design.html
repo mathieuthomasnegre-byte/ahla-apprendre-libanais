@@ -1,0 +1,958 @@
+<title>Ahla – identité et design system</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<style>
+/* Mise en page : une colonne de lecture, sommaire en tête, tableaux et maquettes en blocs défilables. */
+:root {
+  --bg: #FAF5EC; --surface: #FFFFFF; --surface-2: #F3ECDF;
+  --border: #E3D9C8; --border-strong: #8C8172;
+  --text: #2B2118; --text-2: #65594E; --disabled: #A39A8E;
+  --primary: #0D6E7A; --primary-dark: #09525B; --primary-light: #D9F0F2; --on-primary: #FFFFFF;
+  --tuile: #B8452F; --tuile-dark: #8E3120; --on-tuile: #FFFFFF;
+  --soleil: #F2B441; --soleil-dark: #C98A12; --on-soleil: #2B2118;
+  --success: #2B7A4B; --success-bg: #E1F2E7;
+  --error: #B3243E; --error-bg: #FBE3E7;
+  --warning: #8A5A00; --warning-bg: #FFF0C7;
+  --info: #1F5FA8; --info-bg: #E2EEFA;
+  --font-display: 'Readex Pro', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Figtree', 'Segoe UI', system-ui, sans-serif;
+  --font-ar: 'Noto Naskh Arabic', 'Segoe UI', 'Geeza Pro', serif;
+  --font-code: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14191A; --surface: #1E2526; --surface-2: #283132;
+    --border: #364042; --border-strong: #7C8789;
+    --text: #F3EEE6; --text-2: #B4ADA2; --disabled: #6B7476;
+    --primary: #4FC3CF; --primary-dark: #2C8E99; --primary-light: #173A3E; --on-primary: #06282C;
+    --tuile: #F08A70; --tuile-dark: #B85C45; --on-tuile: #2B120B;
+    --soleil: #F5C563; --soleil-dark: #B98A2A; --on-soleil: #2B2118;
+    --success: #6FCF97; --success-bg: #1B3A29;
+    --error: #FF8A9A; --error-bg: #46202A;
+    --warning: #F2C14E; --warning-bg: #40330F;
+    --info: #7FB6F0; --info-bg: #1B3350;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14191A; --surface: #1E2526; --surface-2: #283132;
+  --border: #364042; --border-strong: #7C8789;
+  --text: #F3EEE6; --text-2: #B4ADA2; --disabled: #6B7476;
+  --primary: #4FC3CF; --primary-dark: #2C8E99; --primary-light: #173A3E; --on-primary: #06282C;
+  --tuile: #F08A70; --tuile-dark: #B85C45; --on-tuile: #2B120B;
+  --soleil: #F5C563; --soleil-dark: #B98A2A; --on-soleil: #2B2118;
+  --success: #6FCF97; --success-bg: #1B3A29;
+  --error: #FF8A9A; --error-bg: #46202A;
+  --warning: #F2C14E; --warning-bg: #40330F;
+  --info: #7FB6F0; --info-bg: #1B3350;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--text);
+  font: 16px/1.6 var(--font-body);
+  padding-block: 28px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; }
+h2 { font-size: 1.6rem; font-weight: 600; padding-top: 8px; border-top: 3px solid var(--primary); }
+h3 { font-size: 1.15rem; font-weight: 600; margin-top: 8px; }
+h4 { font-size: 1rem; font-weight: 600; }
+p, ul, ol { margin: 0; max-width: 68ch; }
+ul, ol { padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
+a { color: var(--primary); }
+.lead { font-size: 1.15rem; color: var(--text-2); }
+.eyebrow { font: 600 0.8rem var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--tuile); }
+.muted { color: var(--text-2); font-size: 0.92rem; }
+code { font-family: var(--font-code); font-size: 0.88em; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; }
+pre { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px; overflow-x: auto; font: 0.82rem/1.55 var(--font-code); }
+pre code { background: none; padding: 0; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+th { font: 600 0.78rem var(--font-display); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-2); white-space: nowrap; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.toc { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; max-width: none; flex-direction: row; }
+.toc a { display: block; padding: 5px 12px; border: 1px solid var(--border); border-radius: 999px; text-decoration: none; color: var(--text); font-size: 0.88rem; background: var(--surface); }
+.toc a:hover { border-color: var(--primary); }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.panel.pick { border: 2px solid var(--primary); }
+.tag { align-self: flex-start; font: 600 0.72rem var(--font-display); letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--primary-light); color: var(--primary-dark); }
+:root[data-theme="dark"] .tag { color: var(--primary); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tag { color: var(--primary); } }
+.tag.new { background: var(--warning-bg); color: var(--warning); }
+.tag.done { background: var(--success-bg); color: var(--success); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--border); }
+.sw { display: inline-block; width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--border-strong); vertical-align: middle; }
+.aa { font-weight: 600; color: var(--success); }
+.aa.large { color: var(--warning); }
+.callout { background: var(--warning-bg); border-radius: var(--r-md); padding: 12px 16px; max-width: none; }
+.callout strong { color: var(--warning); }
+.demo { background: var(--surface-2); border-radius: var(--r-lg); padding: 20px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.demo.col { flex-direction: column; align-items: stretch; }
+
+/* --- Composants Ahla (démos réelles) --- */
+.btn {
+  font: 600 1rem var(--font-display); min-height: 52px; padding: 0 22px; border-radius: var(--r-lg);
+  border: 2px solid transparent; border-bottom-width: 5px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  transition: transform 80ms ease-out, border-bottom-width 80ms ease-out, margin-top 80ms ease-out, filter 120ms;
+}
+.btn:hover { filter: brightness(1.06); }
+.btn:active { transform: translateY(3px); border-bottom-width: 2px; margin-bottom: 3px; }
+.btn:focus-visible, .ibtn:focus-visible, .sw-toggle:focus-visible, a:focus-visible { outline: 3px solid var(--soleil); outline-offset: 3px; }
+.btn svg, .ibtn svg { width: 22px; height: 22px; flex: none; }
+.btn-primary { background: var(--primary); color: var(--on-primary); border-color: var(--primary); border-bottom-color: var(--primary-dark); }
+.btn-secondary { background: var(--surface); color: var(--primary); border-color: var(--border-strong); }
+.btn-tertiary { background: transparent; color: var(--primary); border-color: transparent; text-decoration: underline; text-underline-offset: 4px; }
+.btn-danger { background: var(--surface); color: var(--error); border-color: var(--error); }
+.btn-continue { background: var(--success); color: var(--surface); border-color: var(--success); border-bottom-color: color-mix(in srgb, var(--success) 70%, black); }
+.btn-retry { background: var(--soleil); color: var(--on-soleil); border-color: var(--soleil); border-bottom-color: var(--soleil-dark); }
+.btn[disabled] { background: var(--surface-2); color: var(--disabled); border-color: var(--border); cursor: not-allowed; filter: none; transform: none; }
+.ibtn { width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--border-strong); background: var(--surface); color: var(--primary); display: inline-grid; place-items: center; cursor: pointer; }
+.ibtn.audio { background: var(--primary); color: var(--on-primary); border-color: var(--primary-dark); }
+.ibtn.mic { width: 72px; height: 72px; background: var(--tuile); color: var(--on-tuile); border-color: var(--tuile-dark); border-bottom-width: 5px; }
+.ibtn.mic svg { width: 30px; height: 30px; }
+.ibtn.rec { background: var(--error); color: var(--surface); border-color: var(--error); animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--error) 45%, transparent); } 50% { box-shadow: 0 0 0 12px transparent; } }
+.card-lesson { background: var(--surface); border: 2px solid var(--border); border-bottom-width: 5px; border-radius: var(--r-xl); padding: 16px; display: flex; gap: 14px; align-items: center; min-width: 0; flex: 1 1 260px; }
+.card-lesson .ico { width: 52px; height: 52px; border-radius: 16px; background: var(--primary-light); color: var(--primary); display: grid; place-items: center; flex: none; font: 700 1.3rem var(--font-ar); }
+.card-lesson > div { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.bar { height: 12px; border-radius: 999px; background: var(--surface-2); overflow: hidden; border: 1px solid var(--border); }
+.bar i { display: block; height: 100%; border-radius: 999px; background: var(--primary); }
+.flash { background: var(--surface); border: 2px solid var(--border); border-radius: var(--r-xl); padding: 22px; text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; flex: 1 1 260px; }
+.ar { font: 700 2.1rem/1.7 var(--font-ar); direction: rtl; }
+.tr { font: 600 1.15rem var(--font-display); color: var(--primary); }
+.fr { color: var(--text); }
+.streak { display: inline-flex; align-items: center; gap: 6px; font: 700 1rem var(--font-display); color: var(--tuile); background: var(--surface); border: 2px solid var(--border); border-radius: 999px; padding: 6px 14px; }
+.streak svg { width: 20px; height: 20px; }
+.badge { font: 600 0.78rem var(--font-display); padding: 4px 10px; border-radius: 999px; background: var(--success-bg); color: var(--success); }
+.bubble { max-width: 300px; padding: 12px 16px; border-radius: 20px; display: flex; flex-direction: column; gap: 2px; }
+.bubble.tutor { background: var(--surface); border: 2px solid var(--border); border-bottom-left-radius: 6px; align-self: flex-start; }
+.bubble.me { background: var(--primary); color: var(--on-primary); border-bottom-right-radius: 6px; align-self: flex-end; }
+.bubble .ar { font-size: 1.4rem; }
+.bubble.me .tr { color: var(--on-primary); }
+.toast { background: var(--text); color: var(--bg); padding: 12px 18px; border-radius: var(--r-md); display: inline-flex; gap: 10px; align-items: center; }
+.feedback { border-radius: var(--r-lg); padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; flex: 1 1 240px; }
+.feedback svg { width: 24px; height: 24px; flex: none; margin-top: 2px; }
+.feedback.ok { background: var(--success-bg); color: var(--success); }
+.feedback.ko { background: var(--error-bg); color: var(--error); }
+.feedback b { font-family: var(--font-display); display: block; }
+.sw-toggle { width: 52px; height: 30px; border-radius: 999px; border: 2px solid var(--primary); background: var(--primary); position: relative; cursor: pointer; padding: 0; }
+.sw-toggle::after { content: ""; position: absolute; top: 2px; left: 24px; width: 22px; height: 22px; border-radius: 50%; background: var(--on-primary); transition: left 150ms; }
+.sw-toggle[aria-checked="false"] { background: var(--surface); border-color: var(--border-strong); }
+.sw-toggle[aria-checked="false"]::after { left: 2px; background: var(--border-strong); }
+.wave { display: inline-flex; gap: 4px; align-items: center; height: 36px; }
+.wave i { width: 5px; border-radius: 3px; background: var(--tuile); animation: wave 900ms ease-in-out infinite; }
+.wave i:nth-child(1) { height: 30%; } .wave i:nth-child(2) { height: 80%; animation-delay: 120ms; } .wave i:nth-child(3) { height: 55%; animation-delay: 240ms; } .wave i:nth-child(4) { height: 100%; animation-delay: 360ms; } .wave i:nth-child(5) { height: 45%; animation-delay: 480ms; }
+@keyframes wave { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { .wave i, .ibtn.rec { animation: none; } .btn { transition: none; } }
+
+/* Logos */
+.logos { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.logo-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: space-between; text-align: center; }
+.logo-box svg { max-width: 100%; height: 72px; }
+.wordmark { font: 700 2.4rem var(--font-display); letter-spacing: -0.03em; color: var(--primary); line-height: 1; }
+.wordmark span { color: var(--tuile); }
+
+/* Maquette localhost */
+.mock { background: var(--bg); border: 2px solid var(--border-strong); border-radius: 28px; padding: 18px; display: flex; flex-direction: column; gap: 16px; max-width: 420px; width: 100%; margin: 0 auto; }
+.mock header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.mock h3 { margin: 0; font-size: 1.35rem; }
+.mock .goals { list-style: none; padding: 0; gap: 10px; }
+.mock .goals li { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; font-size: 0.92rem; }
+.mock .goals .bar { grid-column: 1 / -1; }
+.mock .rev { list-style: none; padding: 0; gap: 8px; }
+.mock .rev li { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 8px 12px; }
+.mock .rev .ibtn { width: 44px; height: 44px; flex: none; }
+.mock .rev b { font: 600 1rem var(--font-display); color: var(--primary); display: block; }
+.mock .nav4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mock .nav4 a { background: var(--surface); border: 2px solid var(--border); border-bottom-width: 5px; border-radius: var(--r-lg); padding: 12px; text-decoration: none; color: var(--text); font: 600 0.95rem var(--font-display); display: flex; flex-direction: column; gap: 2px; }
+.mock .nav4 small { font: 400 0.8rem var(--font-body); color: var(--text-2); }
+.mock .btn { width: 100%; }
+.screen { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.screen h4 { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.screen dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 0.9rem; }
+.screen dt { font-weight: 600; color: var(--text-2); }
+.screen dd { margin: 0; min-width: 0; }
+.checks { list-style: none; padding: 0; }
+.checks li { padding-left: 28px; position: relative; }
+.checks li::before { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border: 2px solid var(--border-strong); border-radius: 5px; }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 2.5c.5 3.5 5.5 5.5 5.5 11a5.5 5.5 0 0 1-11 0c0-2 .8-3.3 1.8-4.3.3 1.5 1 2.3 1.9 2.6C10 8.500 10.500 5 12 2.5z" fill="currentColor"/></symbol>
+  <symbol id="i-slow" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l-3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5v5.500M12 16.500v.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="logo-arch" viewBox="0 0 64 64"><path d="M10 50V28a22 22 0 0 1 44 0v22H26l-9 8v-8z" fill="currentColor"/><path d="M22 34v6M29 28v18M36 31v12M43 35v4" stroke="var(--logo-ink, #fff)" stroke-width="4" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:14px">
+  <p class="eyebrow">Brief design · application personnelle de libanais parlé</p>
+  <h1>Ahla, le libanais à voix haute</h1>
+  <p class="lead">Trois directions comparées, une identité, une palette vérifiée, un design system et les 25 écrans. La recommandation : « Balcon de Beyrouth », avec des boutons tactiles à relief.</p>
+  <ul class="toc">
+    <li><a href="#directions">Directions</a></li><li><a href="#identite">Nom et identité</a></li><li><a href="#palette">Palette</a></li><li><a href="#typo">Typographie</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#composants">Composants</a></li><li><a href="#boutons">Boutons</a></li><li><a href="#visuels">Illustrations, icônes, 3D</a></li><li><a href="#ecrans">25 écrans</a></li><li><a href="#localhost">Page localhost</a></li><li><a href="#animations">Animations</a></li><li><a href="#checklists">Checklists</a></li><li><a href="#ressources">Ressources</a></li><li><a href="#questions">Questions</a></li><li><a href="#verdict">Recommandation</a></li>
+  </ul>
+  <p class="callout"><strong>À savoir avant de lire.</strong> Le brief décrit plus que l'appli actuelle : chatbot vocal, onboarding, XP, profil, hors-ligne, et un passage à React / Next.js / Tailwind. Rien de cela n'est installé ni commencé. Chaque écran ci-dessous est marqué « existe » ou « nouveau », et les décisions à prendre sont listées dans <a href="#questions">Questions à trancher</a>.</p>
+</header>
+
+<section id="directions">
+  <h2>Trois directions artistiques</h2>
+  <div class="grid">
+    <div class="panel pick">
+      <span class="tag">Recommandée</span>
+      <h3>1. Balcon de Beyrouth</h3>
+      <div class="chips"><span class="chip" style="background:#0D6E7A"></span><span class="chip" style="background:#B8452F"></span><span class="chip" style="background:#F2B441"></span><span class="chip" style="background:#FAF5EC"></span><span class="chip" style="background:#2B2118"></span></div>
+      <p><strong>Ambiance.</strong> Une fin d'après-midi sur un balcon : volets bleu-vert, toits de tuile, pierre blonde, café qui fume.</p>
+      <p><strong>Typographie.</strong> Readex Pro pour les titres et boutons, Figtree pour le texte, Noto Naskh Arabic pour les phrases.</p>
+      <p><strong>Illustration.</strong> Aplats 2D, formes en arche (les fenêtres à trois arcs des maisons beyrouthines), motifs de carreaux de ciment en fond discret.</p>
+      <p><strong>Boutons et cartes.</strong> Coins de 16 à 24 px, relief par un bord inférieur épais qui s'enfonce au clic. Cartes blanches, bord fin.</p>
+      <p><strong>Icônes.</strong> Trait arrondi de 2 px. <strong>Animations.</strong> Courtes, 150 à 300 ms, un seul moment festif par session.</p>
+      <p><strong>Mascotte.</strong> Rakwi, une petite cafetière libanaise dont la vapeur dessine la voix.</p>
+      <p><strong>Pour.</strong> Chaleureuse sans être enfantine, ancrée au Liban, lisible tous les jours, sobre en ressources.</p>
+      <p><strong>Contre.</strong> Demande de dessiner ses propres motifs ; moins « explosive » qu'un jeu.</p>
+    </div>
+    <div class="panel">
+      <h3>2. Souk pop</h3>
+      <div class="chips"><span class="chip" style="background:#D81E78"></span><span class="chip" style="background:#2D5BFF"></span><span class="chip" style="background:#FFC53D"></span><span class="chip" style="background:#FFFFFF"></span><span class="chip" style="background:#1A1A2E"></span></div>
+      <p><strong>Ambiance.</strong> Enseignes, bougainvilliers, klaxons : couleurs saturées et énergie de jeu.</p>
+      <p><strong>Typographie.</strong> Baloo Bhaijaan 2, ronde et épaisse, en latin et en arabe.</p>
+      <p><strong>Illustration.</strong> Personnages aux gros contours, autocollants, confettis.</p>
+      <p><strong>Boutons et cartes.</strong> Très arrondis, ombres dures décalées, cartes colorées.</p>
+      <p><strong>Icônes.</strong> Pleines et bicolores. <strong>Animations.</strong> Rebonds, nombreuses récompenses.</p>
+      <p><strong>Mascotte.</strong> Un chat de rue de Beyrouth, malin et bavard.</p>
+      <p><strong>Pour.</strong> Motivation immédiate, feedback très lisible.</p>
+      <p><strong>Contre.</strong> Fatigue visuelle au quotidien, proche des codes de Duolingo, peut infantiliser, magenta difficile à séparer du rouge d'erreur.</p>
+    </div>
+    <div class="panel">
+      <h3>3. Café du matin</h3>
+      <div class="chips"><span class="chip" style="background:#5B6B3A"></span><span class="chip" style="background:#1D2A44"></span><span class="chip" style="background:#C9A86A"></span><span class="chip" style="background:#F4EFE6"></span><span class="chip" style="background:#22201C"></span></div>
+      <p><strong>Ambiance.</strong> Carnet de voyage : crème, olive, bleu nuit, beaucoup de blanc.</p>
+      <p><strong>Typographie.</strong> Fraunces en titres, sans-serif discrète en texte.</p>
+      <p><strong>Illustration.</strong> Dessin au trait fin, natures mortes.</p>
+      <p><strong>Boutons et cartes.</strong> Plats, bords fins, peu de couleur.</p>
+      <p><strong>Icônes.</strong> Trait de 1,5 px. <strong>Animations.</strong> Fondus lents.</p>
+      <p><strong>Mascotte.</strong> Un cèdre stylisé, presque un simple emblème.</p>
+      <p><strong>Pour.</strong> Élégante, reposante, premium.</p>
+      <p><strong>Contre.</strong> Peu de feedback et d'élan pour parler à voix haute ; ressemble à beaucoup d'applis « calmes » ; boutons moins évidents sur mobile.</p>
+    </div>
+  </div>
+  <p><strong>Choix.</strong> La direction 1, avec deux emprunts à la direction 2 : le relief des boutons et un moment de célébration en fin de session. Parler à voix haute demande de l'élan, mais une appli ouverte tous les jours doit rester douce pour les yeux.</p>
+</section>
+
+<section id="identite">
+  <h2>Nom et identité</h2>
+  <div class="grid">
+    <div class="panel">
+      <h3>Le nom « Ahla »</h3>
+      <p><span class="ar" style="font-size:1.6rem">أهلا</span> se dit <strong>AH-la</strong>, avec un « h » soufflé. C'est le « salut, bienvenue » libanais, forme courte de <em>ahla w sahla</em>.</p>
+      <p>Il sonne aussi comme <span class="ar" style="font-size:1.3rem">أحلى</span> (<em>a7la</em>), « plus beau, plus doux ». Deux associations positives pour un seul mot de quatre lettres.</p>
+      <p class="muted">Je n'ai pas vérifié si le nom est déjà utilisé comme marque. Pour un usage personnel, cela ne pose pas de problème ; à vérifier avant toute diffusion.</p>
+      <p><strong>Alternatives.</strong> Yalla (« allez, on y va »), 7aki (« parole »), Kifak (« comment vas-tu »), Marhaba (« bonjour »).</p>
+      <p><strong>Slogans.</strong> « Le libanais, à voix haute. » · « Lebanese, out loud. »</p>
+    </div>
+    <div class="panel">
+      <h3>Mascotte : Rakwi</h3>
+      <svg viewBox="0 0 200 170" role="img" aria-label="Rakwi, une petite cafetière libanaise souriante dont la vapeur forme une onde sonore" style="max-height:170px">
+        <path d="M78 26q-8 10 0 20M100 16q-10 12 0 28M122 26q-8 10 0 20" fill="none" stroke="var(--tuile)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M112 78L186 52" stroke="var(--text)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M64 60h72l-8 22q22 22 22 46a22 22 0 0 1-22 24H72a22 22 0 0 1-22-24q0-24 22-46z" fill="var(--primary)"/>
+        <rect x="58" y="54" width="84" height="12" rx="6" fill="var(--primary-dark)"/>
+        <circle cx="84" cy="112" r="6" fill="var(--on-primary)"/><circle cx="116" cy="112" r="6" fill="var(--on-primary)"/>
+        <path d="M88 128q12 10 24 0" fill="none" stroke="var(--on-primary)" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="72" cy="124" r="5" fill="var(--soleil)"/><circle cx="128" cy="124" r="5" fill="var(--soleil)"/>
+      </svg>
+      <p>Une <em>rakweh</em>, la petite cafetière à long manche. Au Liban, on parle autour d'un café : la mascotte est l'objet de la conversation elle-même.</p>
+      <ul>
+        <li>Sa vapeur est son langage : onde sonore quand elle parle, petit cœur pour une réussite, volute douce après une erreur.</li>
+        <li>Elle ne juge jamais : après une erreur, elle dit « On réessaie doucement ? ».</li>
+        <li>Forme simple, faite de quatre volumes : facile à animer en 2D et à modéliser en 3D plus tard.</li>
+      </ul>
+      <p class="muted">Esquisse de principe, à redessiner proprement.</p>
+    </div>
+  </div>
+  <h3>Déclinaisons du logo</h3>
+  <div class="logos">
+    <div class="logo-box"><div class="wordmark">ahla<span>.</span></div><span class="muted">Logo textuel</span></div>
+    <div class="logo-box"><div style="display:flex;align-items:center;gap:10px"><svg style="height:52px;width:52px;color:var(--primary)"><use href="#logo-arch"/></svg><div class="wordmark" style="font-size:2rem">ahla</div></div><span class="muted">Avec icône : une bulle en forme d'arche qui contient une onde</span></div>
+    <div class="logo-box"><svg style="height:64px;width:64px;color:var(--text);--logo-ink:var(--surface)"><use href="#logo-arch"/></svg><span class="muted">Monochrome</span></div>
+    <div class="logo-box"><svg style="height:32px;width:32px;color:var(--primary)"><use href="#logo-arch"/></svg><span class="muted">Favicon, 32 px</span></div>
+    <div class="logo-box"><div style="width:72px;height:72px;border-radius:18px;background:var(--primary);display:grid;place-items:center"><svg style="height:48px;width:48px;color:var(--soleil);--logo-ink:var(--primary-dark)"><use href="#logo-arch"/></svg></div><span class="muted">Icône d'appli mobile</span></div>
+  </div>
+</section>
+
+<section id="palette">
+  <h2>Palette de couleurs</h2>
+  <p>Les couleurs viennent de Beyrouth : le bleu-vert des volets, la tuile des toits, la pierre blonde, le jaune du soleil. Les contrastes ci-dessous sont calculés dans cette page selon la formule WCAG, sur le fond indiqué. AA = 4,5:1 pour le texte normal ; « AA grand » = 3:1, réservé aux grands textes et éléments d'interface.</p>
+  <p>L'erreur est un rouge framboise, plus froid que la tuile, et s'accompagne toujours d'une icône et d'un texte : la couleur seule ne porte jamais l'information.</p>
+  <h3>Mode clair</h3>
+  <div class="scroll"><table id="pal-light"></table></div>
+  <h3>Mode sombre</h3>
+  <div class="scroll"><table id="pal-dark"></table></div>
+  <h3>Niveaux, catégories et états</h3>
+  <div class="scroll"><table id="pal-sem"></table></div>
+</section>
+
+<section id="typo">
+  <h2>Typographie</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Rôle</th><th>Police</th><th>Pourquoi</th><th>Licence</th></tr></thead>
+    <tbody>
+      <tr><td>Titres, boutons, labels, translittération</td><td style="font-family:var(--font-display);font-weight:600">Readex Pro</td><td>Dérivée de Lexend, pensée pour la facilité de lecture. Sa partie arabe a été dessinée par Nadine Chahine, créatrice de caractères libanaise. Les chiffres 2, 3 et 7 de l'Arabizi restent bien distincts des lettres.</td><td>OFL</td></tr>
+      <tr><td>Texte courant, traductions</td><td>Figtree</td><td>Sans-serif ronde et nette, tous les accents français.</td><td>OFL</td></tr>
+      <tr><td>Phrases en arabe</td><td style="font-family:var(--font-ar);font-size:1.3rem">نوتو نسخ</td><td>Noto Naskh Arabic : les formes naskh distinguent mieux les lettres pour un débutant. Toujours en grand.</td><td>OFL</td></tr>
+      <tr><td>Monospace</td><td>Aucune</td><td>Inutile : Readex Pro suffit pour l'Arabizi. Une police de moins à charger.</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Les licences ont été contrôlées dans le dépôt officiel <code>google/fonts</code> (dossier <code>ofl/</code>). Pour l'appli, héberger les fichiers de police en local : charger depuis le service Google Fonts envoie l'adresse IP à Google à chaque visite.</p>
+  <h3>Échelle</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Token</th><th>Taille / interligne</th><th>Graisse</th><th>Exemple</th></tr></thead>
+    <tbody>
+      <tr><td><code>display</code></td><td class="num">32 / 38</td><td>700</td><td style="font:700 2rem/1.2 var(--font-display)">Ahla ! On parle ?</td></tr>
+      <tr><td><code>h1</code> titre d'écran</td><td class="num">24 / 30</td><td>600</td><td style="font:600 1.5rem/1.25 var(--font-display)">Mes révisions</td></tr>
+      <tr><td><code>h2</code> titre de leçon</td><td class="num">20 / 26</td><td>600</td><td style="font:600 1.25rem/1.3 var(--font-display)">Au café et au restaurant</td></tr>
+      <tr><td><code>ar-lg</code> phrase libanaise</td><td class="num">34 / 58</td><td>700</td><td class="ar">كيفك؟</td></tr>
+      <tr><td><code>translit</code></td><td class="num">18 / 26</td><td>600</td><td class="tr">kifak? / kifik?</td></tr>
+      <tr><td><code>body</code> traduction française</td><td class="num">16 / 26</td><td>400</td><td>Comment vas-tu ?</td></tr>
+      <tr><td><code>body-sm</code> traduction anglaise</td><td class="num">14 / 22</td><td>400</td><td class="muted">How are you?</td></tr>
+      <tr><td><code>button</code></td><td class="num">16 / 20</td><td>600</td><td style="font:600 1rem var(--font-display)">Continuer</td></tr>
+      <tr><td><code>feedback</code></td><td class="num">16 / 24</td><td>600</td><td style="color:var(--success);font-weight:600">Bien dit ! On t'a compris.</td></tr>
+      <tr><td><code>error</code></td><td class="num">14 / 22</td><td>500</td><td style="color:var(--error);font-weight:500">Le micro est bloqué. Autorise-le dans le navigateur, puis réessaie.</td></tr>
+      <tr><td><code>caption</code> progression</td><td class="num">13 / 18</td><td>500</td><td class="muted" style="font-variant-numeric:tabular-nums">3 / 8 phrases · 4 jours d'affilée</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>L'ordre de lecture d'une phrase est fixe : arabe, translittération, français, puis anglais si activé.</li>
+    <li>L'arabe porte toujours <code>lang="ar"</code> et <code>dir="rtl"</code>, jamais en dessous de 24 px, interligne 1,7 pour laisser respirer les points et les voyelles.</li>
+    <li>Jamais de texte courant sous 14 px. Largeur de lecture limitée à 65 caractères.</li>
+    <li>Espacement des lettres : 0 partout, +0,06 em sur les petites étiquettes en capitales.</li>
+  </ul>
+</section>
+
+<section id="tokens">
+  <h2>Design system : tokens</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Famille</th><th>Valeurs</th></tr></thead>
+    <tbody>
+      <tr><td>Espacements</td><td class="num">4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 px. Gouttière d'écran : 16 px mobile, 24 px tablette, 32 px bureau.</td></tr>
+      <tr><td>Rayons</td><td class="num">8 (champs) · 12 (toasts) · 16 (boutons) · 24 (cartes) · 999 (pastilles)</td></tr>
+      <tr><td>Bordures</td><td>1 px décor · 2 px éléments interactifs · bord inférieur 5 px pour le relief</td></tr>
+      <tr><td>Ombres</td><td>Presque aucune : le relief vient des bords. Une seule ombre portée, <code>0 8px 24px rgb(43 33 24 / 12%)</code>, pour les modales et toasts.</td></tr>
+      <tr><td>Icônes</td><td>24 px, trait 2 px, bouts arrondis ; 20 px dans les pastilles ; 30 px dans le bouton micro</td></tr>
+      <tr><td>Durées</td><td class="num">80 ms (pression) · 150 ms (état) · 250 ms (entrée) · 400 ms (célébration)</td></tr>
+      <tr><td>Courbes</td><td><code>ease-out</code> pour les entrées, <code>cubic-bezier(.34,1.56,.64,1)</code> pour le léger rebond des réussites</td></tr>
+      <tr><td>Z-index</td><td class="num">base 0 · en-tête 10 · barre du bas 20 · modale 40 · toast 50</td></tr>
+      <tr><td>Points de rupture</td><td class="num">mobile &lt; 640 · tablette 640 à 1023 · bureau ≥ 1024 px. Colonne de contenu : 560 px max en leçon, 960 px max au tableau de bord.</td></tr>
+      <tr><td>Zones tactiles</td><td class="num">48 px minimum, 56 px pour l'audio, 72 px pour le micro</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="composants">
+  <h2>Bibliothèque de composants</h2>
+  <p>Démonstrations réelles, dans le thème de la page. Elles réagissent au survol, au clic et au clavier.</p>
+  <div class="demo">
+    <div class="card-lesson"><div class="ico">ق</div><div><h4>Au café et au restaurant</h4><span class="muted">6 / 10 phrases</span><div class="bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="Progression de la leçon"><i style="width:60%"></i></div></div></div>
+    <div class="flash"><p class="ar" lang="ar">صحتين</p><p class="tr">sa7ten</p><p class="fr">Bon appétit</p><div style="display:flex;gap:10px;margin-top:8px"><button class="ibtn audio" aria-label="Écouter"><svg><use href="#i-play"/></svg></button><button class="ibtn" aria-label="Écouter lentement"><svg><use href="#i-slow"/></svg></button></div></div>
+  </div>
+  <div class="demo">
+    <span class="streak"><svg><use href="#i-flame"/></svg>4 jours</span>
+    <span class="badge">Terminé</span>
+    <span class="tag">Débutant</span>
+    <button class="sw-toggle" role="switch" aria-checked="true" aria-label="Parler lentement" onclick="this.setAttribute('aria-checked', this.getAttribute('aria-checked') === 'true' ? 'false' : 'true')"></button>
+    <span class="wave" role="img" aria-label="Micro en écoute"><i></i><i></i><i></i><i></i><i></i></span>
+    <span class="toast"><svg width="20" height="20"><use href="#i-check"/></svg>3 phrases ajoutées à tes révisions</span>
+  </div>
+  <div class="demo col">
+    <div class="bubble tutor"><span class="ar" lang="ar">شو بتحب تشرب؟</span><span class="tr">shu bet7ebb teshrab?</span><span class="muted">Que veux-tu boire ?</span></div>
+    <div class="bubble me"><span class="ar" lang="ar">بدي قهوة</span><span class="tr">badde 2ahweh</span></div>
+  </div>
+  <div class="demo">
+    <div class="feedback ok"><svg><use href="#i-check"/></svg><div><b>Bien dit !</b>On a compris « sa7ten ». Réécoute-toi à côté du modèle.</div></div>
+    <div class="feedback ko"><svg><use href="#i-alert"/></svg><div><b>Pas tout à fait</b>On a compris autre chose. Écoute en lent, puis réessaie.</div></div>
+  </div>
+  <div class="scroll"><table id="comp-table"></table></div>
+  <h3>Exemple Tailwind CSS</h3>
+  <pre><code id="code-comp"></code></pre>
+</section>
+
+<section id="boutons">
+  <h2>Boutons et interactions</h2>
+  <p>Le relief vient d'un bord inférieur plus épais et plus foncé. Au clic, le bouton descend de 3 px et le bord s'amincit : on sent qu'on a appuyé. Essayez-les.</p>
+  <div class="demo">
+    <button class="btn btn-primary">Commencer</button>
+    <button class="btn btn-secondary">Plus tard</button>
+    <button class="btn btn-tertiary">Voir la traduction</button>
+    <button class="btn btn-continue"><svg><use href="#i-check"/></svg>Continuer</button>
+    <button class="btn btn-retry"><svg><use href="#i-repeat"/></svg>Réessayer</button>
+    <button class="btn btn-danger">Effacer ma progression</button>
+    <button class="btn btn-primary" disabled>Valider</button>
+  </div>
+  <div class="demo">
+    <button class="ibtn audio" aria-label="Écouter"><svg><use href="#i-play"/></svg></button>
+    <button class="ibtn" aria-label="Répéter"><svg><use href="#i-repeat"/></svg></button>
+    <button class="ibtn" aria-label="Ralentir"><svg><use href="#i-slow"/></svg></button>
+    <button class="ibtn mic" aria-label="Parler"><svg><use href="#i-mic"/></svg></button>
+    <button class="ibtn mic rec" aria-label="Arrêter l'enregistrement"><svg><use href="#i-stop"/></svg></button>
+  </div>
+  <div class="scroll"><table id="btn-table"></table></div>
+  <ul>
+    <li><strong>Communs à tous.</strong> Rayon 16 px, hauteur 52 px (48 px en version compacte), marge interne horizontale 22 px, texte Readex Pro 600 en 16 px, bordure 2 px, bord inférieur 5 px.</li>
+    <li><strong>Survol.</strong> Luminosité +6 %. <strong>Pressé.</strong> Descente de 3 px en 80 ms. <strong>Focus clavier.</strong> Anneau jaune soleil de 3 px, décalé de 3 px, visible sur tous les fonds.</li>
+    <li><strong>Désactivé.</strong> Fond neutre, texte gris, pas de relief, attribut <code>disabled</code> ; la raison est écrite à côté.</li>
+    <li><strong>Chargement.</strong> Le libellé reste, un point animé le précède, <code>aria-busy="true"</code>.</li>
+    <li><strong>Boutons icônes.</strong> Toujours un <code>aria-label</code> en français ; le micro annonce son état (« Parler » puis « Arrêter l'enregistrement »).</li>
+  </ul>
+</section>
+
+<section id="visuels">
+  <h2>Illustrations, icônes, 2D et 3D</h2>
+  <div class="grid">
+    <div class="panel">
+      <h3>Illustrations</h3>
+      <ul>
+        <li><strong>Style.</strong> Aplats sans contour, 4 à 5 couleurs de la palette, ombres en une seule teinte plus foncée.</li>
+        <li><strong>Formes.</strong> Arches, carreaux de ciment, balcons, tasses, plateaux de mezzés.</li>
+        <li><strong>Personnages.</strong> Rakwi d'abord ; plus tard deux interlocuteurs des dialogues, dessinés simplement.</li>
+        <li><strong>Leçons.</strong> Une vignette par thème, pas d'image par phrase.</li>
+        <li><strong>Écrans vides.</strong> Rakwi et une phrase d'invitation. <strong>Réussite.</strong> Vapeur en cœur. <strong>Erreur.</strong> Rakwi penche la tête. <strong>Chargement.</strong> La vapeur ondule.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Icônes</h3>
+      <ul>
+        <li><strong>Style.</strong> Contour, trait 2 px, 24 px ; version pleine uniquement pour l'onglet actif et le bouton lecture.</li>
+        <li><strong>Indispensables.</strong> Lecture, pause, lent, répéter, micro, arrêt, traduction, validé, alerte, flamme, cadenas, réglages, accueil, leçons, conversation, révision, progression, hors-ligne.</li>
+        <li><strong>Source recommandée.</strong> Lucide, copiée en SVG dans le projet, sans package.</li>
+        <li><strong>Règle.</strong> Une icône seule porte toujours un libellé accessible ; dans la barre du bas, icône et mot ensemble.</li>
+      </ul>
+    </div>
+  </div>
+  <h3>2D ou 3D</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Option</th><th>Avantages</th><th>Inconvénients</th><th>Poids</th><th>Verdict pour une première version</th></tr></thead>
+    <tbody>
+      <tr><td>SVG animé en CSS</td><td>Net à toute taille, suit le thème clair/sombre, aucun package</td><td>Animations simples seulement</td><td class="num">2 à 15 Ko</td><td><strong>Oui.</strong> Mascotte, icônes, vignettes, récompenses.</td></tr>
+      <tr><td>Lottie</td><td>Animations riches venues d'After Effects</td><td>Lecteur à charger, fichiers à créer ou à trouver, licences au cas par cas</td><td class="num">60 Ko et plus pour le lecteur</td><td>Plus tard, si une animation le justifie.</td></tr>
+      <tr><td>PNG / WebP</td><td>Simple</td><td>Flou en grand, ne suit pas le thème</td><td class="num">20 à 200 Ko</td><td>Seulement pour d'éventuelles photos.</td></tr>
+      <tr><td>3D (GLB + three.js)</td><td>Effet « wow », mascotte vivante</td><td>Moteur lourd, modélisation longue, batterie du téléphone</td><td class="num">150 Ko et plus pour le moteur, 0,2 à 2 Mo par modèle</td><td><strong>Non.</strong> À réserver à une scène de récompense, un jour.</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><strong>Idées 2D.</strong> Rakwi, tasse de café, cèdre, téléphone, carnet, silhouette de la côte libanaise, plateau de mezzés, taxi-service, arche à trois baies.</li>
+    <li><strong>Idées 3D, plus tard.</strong> Rakwi qui tourne, tasse-trophée, médailles de série.</li>
+    <li><strong>Formats.</strong> SVG par défaut ; WebP pour les photos ; GLB compressé pour la 3D.</li>
+    <li><strong>Limites de poids.</strong> SVG sous 15 Ko, image sous 100 Ko, page d'accueil sous 300 Ko au total hors polices.</li>
+    <li><strong>Drapeau et carte.</strong> Les éviter comme décor : préférer des objets du quotidien, plus chaleureux et sans charge politique.</li>
+  </ul>
+</section>
+
+<section id="ecrans">
+  <h2>Les 25 écrans</h2>
+  <p><strong>Règles communes à tous les écrans.</strong> Fond <code>bg</code>, cartes <code>surface</code>, une seule action principale en bas de l'écran sur mobile. Titre en <code>h1</code>, phrases en <code>ar-lg</code> + <code>translit</code> + <code>body</code>. Gouttière de 16 px, 24 px entre blocs. Sur mobile : une colonne et barre de navigation en bas. Sur bureau : colonne centrée de 560 px pour les exercices, deux colonnes pour les tableaux de bord, navigation à gauche. Tout audio a son texte affiché ; tout se fait au clavier ; les entrées durent 250 ms et disparaissent si l'utilisateur a demandé moins d'animations.</p>
+  <p>Chaque fiche donne ce qui est propre à l'écran. « Existe » signifie que l'appli actuelle a déjà une version simple de cet écran.</p>
+  <div class="grid" id="screens" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))"></div>
+</section>
+
+<section id="localhost">
+  <h2>Page d'accueil localhost</h2>
+  <p>L'appli tourne aujourd'hui sur <code>http://localhost:5173</code>, et le raccourci du bureau pointe dessus. Si vous passez à Next.js, son port habituel est 3000 ; je recommande alors de garder 3000 et de mettre le raccourci à jour.</p>
+  <div class="grid" style="align-items:start">
+    <div class="mock" aria-label="Maquette de la page d'accueil sur mobile">
+      <header><div style="display:flex;align-items:center;gap:8px"><svg style="height:34px;width:34px;color:var(--primary)"><use href="#logo-arch"/></svg><span class="wordmark" style="font-size:1.5rem">ahla</span></div><span class="streak"><svg><use href="#i-flame"/></svg>4 jours</span></header>
+      <div><h3>Ahla ! On parle 5 minutes ?</h3><p class="muted">8 phrases t'attendent aujourd'hui.</p></div>
+      <button class="btn btn-primary"><svg><use href="#i-play"/></svg>Commencer la session du jour</button>
+      <div><h4>Objectifs du jour</h4>
+        <ul class="goals" style="margin-top:8px">
+          <li><span>Écouter 5 phrases</span><span class="muted">5 / 5</span><div class="bar"><i style="width:100%;background:var(--success)"></i></div></li>
+          <li><span>Répéter 3 phrases à voix haute</span><span class="muted">1 / 3</span><div class="bar"><i style="width:33%"></i></div></li>
+          <li><span>Réviser 8 cartes</span><span class="muted">0 / 8</span><div class="bar"><i style="width:0"></i></div></li>
+        </ul>
+      </div>
+      <div><h4>À réviser</h4>
+        <ul class="rev" style="margin-top:8px">
+          <li><button class="ibtn audio" aria-label="Écouter sa7ten"><svg><use href="#i-play"/></svg></button><div><b>sa7ten</b><span class="muted">Bon appétit</span></div></li>
+          <li><button class="ibtn audio" aria-label="Écouter yislamo"><svg><use href="#i-play"/></svg></button><div><b>yislamo</b><span class="muted">Merci (familier)</span></div></li>
+        </ul>
+      </div>
+      <div class="nav4"><a href="#localhost">Leçons<small>6 thèmes</small></a><a href="#localhost">Conversation<small>Parler avec le tuteur</small></a><a href="#localhost">Révisions<small>8 cartes</small></a><a href="#localhost">Progression<small>23 phrases apprises</small></a></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+      <h3>Structure et hiérarchie</h3>
+      <ol>
+        <li>En-tête : logo, série de jours, réglages.</li>
+        <li>Salutation et une phrase qui dit ce qui attend aujourd'hui.</li>
+        <li>Le bouton principal, seul élément en couleur pleine.</li>
+        <li>Objectifs du jour, avec barres de progression.</li>
+        <li>Phrases à réviser, écoutables tout de suite.</li>
+        <li>Quatre accès : Leçons, Conversation, Révisions, Progression.</li>
+      </ol>
+      <p><strong>Bureau.</strong> Deux colonnes : à gauche la salutation, le bouton et les objectifs ; à droite les phrases à réviser et les quatre accès. Navigation latérale à la place de la barre du bas.</p>
+      <p><strong>Chargement.</strong> Blocs gris aux dimensions finales, sans décalage à l'arrivée du contenu. <strong>Vide.</strong> « Rien à réviser pour l'instant. Commence une leçon pour remplir tes révisions. » avec Rakwi. <strong>Erreur.</strong> « La voix ne répond pas. Vérifie ta connexion ou ta clé Azure dans les Réglages. » avec un bouton Réessayer ; le reste de la page reste utilisable.</p>
+      <p><strong>Animations.</strong> Les blocs arrivent en fondu montant de 8 px, décalés de 40 ms ; les barres se remplissent en 400 ms ; la flamme bat une fois si la série a augmenté.</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Texte français</th><th>Anglais</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Ahla ! On parle 5 minutes ?</td><td>Ahla! Five minutes out loud?</td><td>—</td></tr>
+          <tr><td>Commencer la session du jour</td><td>Start today's session</td><td>Lance écoute, répétition puis révision</td></tr>
+          <tr><td>Objectifs du jour</td><td>Today's goals</td><td>—</td></tr>
+          <tr><td>À réviser</td><td>To review</td><td>Lecture audio de la phrase</td></tr>
+          <tr><td>Leçons · Conversation · Révisions · Progression</td><td>Lessons · Conversation · Reviews · Progress</td><td>Ouvre l'écran correspondant</td></tr>
+          <tr><td>4 jours d'affilée</td><td>4-day streak</td><td>Ouvre l'écran de série</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+  <h3>Exemple React / Next.js / Tailwind CSS</h3>
+  <p class="muted">Code d'illustration, non installé ni exécuté : l'appli actuelle n'utilise pas ces outils. Écrit pour Tailwind 4, où les tokens se déclarent en CSS.</p>
+  <pre><code id="code-home"></code></pre>
+</section>
+
+<section id="animations">
+  <h2>Animations et micro-interactions</h2>
+  <div class="scroll"><table id="anim-table"></table></div>
+  <p>Tout se fait en CSS. Aucune bibliothèque d'animation n'est nécessaire pour cette liste. Avec <code>prefers-reduced-motion</code>, les déplacements et rebonds sont supprimés ; seuls restent les changements de couleur et de texte.</p>
+</section>
+
+<section id="checklists">
+  <h2>Accessibilité et checklists</h2>
+  <div class="grid">
+    <div class="panel"><h3>Accessibilité</h3><ul class="checks">
+      <li>Texte normal à 4,5:1 minimum, grands textes et contours de champs à 3:1</li>
+      <li>Corps de texte à 16 px, arabe à 24 px minimum</li>
+      <li>Zones tactiles de 48 px minimum</li>
+      <li>Tout est atteignable à la touche Tab, dans l'ordre visuel</li>
+      <li>Focus visible : anneau de 3 px sur chaque élément interactif</li>
+      <li>Chaque bouton icône a un libellé</li>
+      <li>Chaque audio a son texte : arabe, translittération, traduction</li>
+      <li>Les illustrations porteuses de sens ont un texte alternatif, les décoratives sont masquées</li>
+      <li>Modes clair et sombre conçus tous les deux</li>
+      <li>Animations réduites si l'utilisateur le demande</li>
+      <li>Arabe marqué <code>lang="ar"</code> et <code>dir="rtl"</code></li>
+      <li>Réussite et erreur annoncées par une zone <code>role="status"</code>, jamais par la couleur seule</li>
+      <li>Le micro annonce son état et s'arrête avec la touche Espace ou Échap</li>
+    </ul></div>
+    <div class="panel"><h3>Cohérence visuelle</h3><ul class="checks">
+      <li>Une seule action principale colorée par écran</li>
+      <li>Toutes les couleurs viennent des tokens, aucune valeur en dur</li>
+      <li>Ordre fixe : arabe, translittération, français</li>
+      <li>Rayons : 16 px pour les boutons, 24 px pour les cartes</li>
+      <li>Relief réservé à ce qui se clique</li>
+      <li>La tuile sert au micro et à la série, pas aux erreurs</li>
+      <li>Rakwi apparaît aux moments clés seulement : accueil, vide, réussite, erreur</li>
+      <li>Même ton partout : tutoiement, phrases courtes, jamais de reproche</li>
+    </ul></div>
+    <div class="panel"><h3>Performance</h3><ul class="checks">
+      <li>Page d'accueil sous 300 Ko hors polices</li>
+      <li>Trois familles de polices au plus, hébergées en local, en WOFF2, avec <code>font-display: swap</code></li>
+      <li>Illustrations en SVG, sous 15 Ko chacune</li>
+      <li>Audio déjà entendu gardé en cache pour ne pas redemander Azure</li>
+      <li>Animations sur <code>transform</code> et <code>opacity</code> uniquement</li>
+      <li>Aucune bibliothèque ajoutée pour un besoin que le CSS couvre</li>
+      <li>Premier affichage utile en moins d'une seconde en local</li>
+    </ul></div>
+    <div class="panel"><h3>Licences et sécurité des ressources</h3><ul class="checks">
+      <li>Licence lue sur le dépôt ou le site officiel, pas sur un site miroir</li>
+      <li>Usage commercial autorisé, même pour un projet personnel</li>
+      <li>Modification autorisée</li>
+      <li>Redistribution autorisée</li>
+      <li>Attribution requise ou non ; si oui, notée dans <code>DECISIONS.md</code></li>
+      <li>Fichier téléchargé depuis la source officielle</li>
+      <li>SVG ouvert et relu : pas de script, pas de lien externe</li>
+      <li>Aucun traceur, aucune requête vers un serveur tiers à l'usage</li>
+      <li>Pour un package : nom exact, éditeur, scripts d'installation, <code>npm audit</code></li>
+      <li>Décision et date consignées</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="ressources">
+  <h2>Ressources vérifiées et à rechercher</h2>
+  <p>Ce que j'ai contrôlé aujourd'hui dans le registre npm et les dépôts officiels, sans rien installer. Les versions sont celles affichées par npm au moment du contrôle.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Ressource</th><th>Éditeur et dépôt</th><th>Licence</th><th>Données transmises</th><th>Avis</th></tr></thead>
+    <tbody>
+      <tr><td>Readex Pro, Figtree, Noto Naskh Arabic</td><td>Dépôt <code>google/fonts</code>, dossier <code>ofl/</code></td><td>OFL 1.1</td><td>Aucune si hébergées en local</td><td><strong>Utiliser</strong>, en fichiers locaux</td></tr>
+      <tr><td>Lucide (icônes)</td><td><code>lucide-icons/lucide</code>, lucide.dev</td><td>ISC</td><td>Aucune : simples SVG</td><td><strong>Utiliser</strong> en copiant les SVG ; alternative : Phosphor (MIT)</td></tr>
+      <tr><td>Next.js 16</td><td>Vercel, <code>vercel/next.js</code></td><td>MIT</td><td>Télémétrie d'usage anonyme activée par défaut, désactivable</td><td>Sûr, à installer seulement si vous confirmez la migration ; désactiver la télémétrie</td></tr>
+      <tr><td>React 19</td><td>npm indique <code>react/react</code> ; je connaissais <code>facebook/react</code></td><td>MIT</td><td>Aucune</td><td>Sûr ; adresse du dépôt à reconfirmer avant installation</td></tr>
+      <tr><td>Tailwind CSS 4</td><td>Tailwind Labs, <code>tailwindlabs/tailwindcss</code></td><td>MIT</td><td>Aucune : outil de compilation</td><td>Sûr, lié à la décision de migration</td></tr>
+      <tr><td>TypeScript 7</td><td>Microsoft, <code>microsoft/TypeScript</code></td><td>Apache-2.0</td><td>Aucune</td><td>Sûr</td></tr>
+      <tr><td>Motion (ex Framer Motion)</td><td><code>motiondivision/motion</code></td><td>MIT</td><td>Aucune connue</td><td><strong>Ne pas installer</strong> pour l'instant : le CSS suffit</td></tr>
+      <tr><td>lottie-web</td><td>Airbnb, <code>airbnb/lottie-web</code></td><td>MIT</td><td>Aucune ; les fichiers d'animation ont chacun leur licence</td><td><strong>Ne pas installer</strong> pour l'instant ; dernière publication en mai 2025</td></tr>
+      <tr><td>three.js</td><td><code>mrdoob/three.js</code></td><td>MIT</td><td>Aucune</td><td><strong>Ne pas installer</strong> : pas de 3D dans la première version</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Je n'ai pas audité les dépendances transitives ni les scripts d'installation de ces packages : ce contrôle se fait au moment d'installer, avec <code>npm audit</code>.</p>
+  <h3>Types de ressources à chercher, avec les précautions</h3>
+  <ul>
+    <li><strong>Illustrations.</strong> Le mieux est de dessiner les vôtres à partir de formes simples. Les banques gratuites (unDraw, Open Peeps) ont des styles reconnaissables et des licences que je n'ai pas relues : à vérifier avant usage.</li>
+    <li><strong>Animations Lottie.</strong> LottieFiles : licence différente pour chaque fichier, à lire une par une.</li>
+    <li><strong>Modèles 3D.</strong> Poly Pizza, Sketchfab : chercher les licences CC0 ou CC-BY, et noter l'attribution.</li>
+    <li><strong>Motifs de carreaux.</strong> À redessiner soi-même d'après photos : les motifs traditionnels sont anciens, mais les fichiers d'autrui ont leurs droits.</li>
+  </ul>
+</section>
+
+<section id="questions">
+  <h2>Questions à trancher avant de commencer</h2>
+  <ol>
+    <li><strong>Migration technique.</strong> Réécrire l'appli en Next.js / React / Tailwind / TypeScript, ou appliquer ce design à l'appli actuelle, qui n'a aucune dépendance ? La migration installe plusieurs centaines de packages indirects à vérifier. Mon avis : appliquer d'abord le design à l'appli actuelle, migrer quand le chatbot ou le nombre d'écrans le justifie.</li>
+    <li><strong>Chatbot vocal.</strong> Il lui faut un service de conversation par IA, donc un nouveau fournisseur à vérifier, une clé, et l'envoi de vos échanges à ce service. Le voulez-vous dans la prochaine version ou plus tard ?</li>
+    <li><strong>Score de prononciation.</strong> Azure ne note pas le libanais son par son. Acceptez-vous un retour en deux parties, « ce qui a été compris » et « réécoute-toi », plutôt qu'une note sur 100 qui serait inventée ?</li>
+    <li><strong>Jeu.</strong> Voulez-vous des points (XP) et des badges, ou seulement la série de jours et les objectifs du jour ? Je recommande de commencer sans XP.</li>
+    <li><strong>Anglais.</strong> Le brief prévoit des traductions anglaises. Faut-il les ajouter aux 69 phrases, ou l'anglais ne sert-il qu'à l'interface ?</li>
+    <li><strong>Onboarding, niveau, objectif, profil.</strong> Utiles pour une appli publique ; pour vous seul, un seul écran de réglages peut suffire. Les garder ?</li>
+    <li><strong>Hors-ligne.</strong> Faut-il pouvoir réviser sans connexion, avec l'audio déjà entendu gardé sur l'appareil ?</li>
+    <li><strong>Téléphone.</strong> L'appli ne tourne que sur ce PC. Pour l'ouvrir sur votre téléphone, il faudra l'héberger quelque part, ce qui est une autre décision de sécurité.</li>
+    <li><strong>Mascotte.</strong> Rakwi la cafetière vous plaît-elle, ou préférez-vous un chat, un oiseau ou aucun personnage ?</li>
+    <li><strong>Relecture.</strong> Qui relira les phrases libanaises ? Le plus beau design n'aide pas si une expression est fausse.</li>
+  </ol>
+</section>
+
+<section id="verdict">
+  <h2>Recommandation finale</h2>
+  <div class="panel pick">
+    <ul>
+      <li><strong>Direction.</strong> Balcon de Beyrouth.</li>
+      <li><strong>Palette.</strong> Bleu volet en couleur principale, tuile pour la voix et la série, soleil pour le focus et « réessayer », fond pierre claire ; mode sombre fourni.</li>
+      <li><strong>Boutons.</strong> Tactiles, à bord inférieur épais qui s'enfonce de 3 px, rayon 16 px, hauteur 52 px ; micro rond de 72 px en tuile.</li>
+    </ul>
+    <h3>Les 5 prochaines actions</h3>
+    <ol>
+      <li>Répondre aux questions 1 à 4 ci-dessus : elles fixent le périmètre.</li>
+      <li>Appliquer tokens, polices locales et boutons à l'appli actuelle, écran d'accueil d'abord.</li>
+      <li>Refaire l'écran de répétition orale avec le grand micro, l'onde et le retour en deux parties.</li>
+      <li>Ajouter la série de jours et les objectifs du jour sur l'accueil.</li>
+      <li>Redessiner Rakwi et le logo en SVG propres, puis créer le favicon et l'icône.</li>
+    </ol>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function () {
+  const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+  const lum = (h) => { const c = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4))); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+  const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)).join(' ');
+
+  function table(id, head, rows) {
+    const t = document.getElementById(id);
+    const tr = el('tr'); head.forEach((h) => tr.append(el('th', h)));
+    const thead = el('thead'); thead.append(tr);
+    const tbody = el('tbody');
+    rows.forEach((r) => { const row = el('tr'); r.forEach((c) => { const td = el('td'); if (c instanceof Node) td.append(c); else td.textContent = c; row.append(td); }); tbody.append(row); });
+    t.append(thead, tbody);
+  }
+
+  // [token, hex, usage, couleur de comparaison, libellé de la comparaison, exemple]
+  function palette(id, rows) {
+    table(id, ['', 'Token', 'HEX', 'RGB', 'Usage', 'Contraste', 'Exemple'], rows.map(([tok, hex, use, against, label, ex]) => {
+      const sw = el('span', null, 'sw'); sw.style.background = hex;
+      const code = el('code', tok);
+      let c = '—';
+      if (against) {
+        const r = ratio(hex, against);
+        c = el('span');
+        c.append(r.toFixed(1).replace('.', ',') + ':1 ' + label + ' ');
+        c.append(el('span', r >= 4.5 ? 'AA' : r >= 3 ? 'AA grand' : 'décor', r >= 4.5 ? 'aa' : r >= 3 ? 'aa large' : 'muted'));
+      }
+      return [sw, code, hex, rgb(hex), use, c, ex];
+    }));
+  }
+
+  const W = '#FFFFFF', BG = '#FAF5EC', INK = '#2B2118';
+  palette('pal-light', [
+    ['primary', '#0D6E7A', 'Bleu volet. Action principale, liens, translittération', W, 'avec texte blanc', 'Bouton « Commencer »'],
+    ['primary-dark', '#09525B', 'Bord inférieur des boutons, survol', W, 'avec texte blanc', 'Relief du bouton principal'],
+    ['primary-light', '#D9F0F2', 'Fonds doux, pastilles, icône de leçon', '#09525B', 'avec primary-dark', 'Pastille « Débutant »'],
+    ['secondary (tuile)', '#B8452F', 'Voix : micro, onde, série de jours', W, 'avec texte blanc', 'Bouton micro'],
+    ['accent (soleil)', '#F2B441', 'Anneau de focus, « Réessayer », étoiles', INK, 'avec texte foncé', 'Bouton « Réessayer »'],
+    ['success', '#2B7A4B', 'Vert cèdre. Réponse juste, « Continuer », terminé', W, 'avec texte blanc', 'Bandeau « Bien dit ! »'],
+    ['error', '#B3243E', 'Framboise. Erreur, enregistrement en cours, action destructive', BG, 'sur le fond', 'Message « Le micro est bloqué »'],
+    ['warning', '#8A5A00', 'Avertissement, toujours sur son fond #FFF0C7', '#FFF0C7', 'sur son fond', 'Bandeau « Voix non configurée »'],
+    ['info', '#1F5FA8', 'Conseils, notes de grammaire', BG, 'sur le fond', 'Note « kifik à une femme »'],
+    ['bg', '#FAF5EC', 'Pierre claire. Fond principal', INK, 'avec le texte', 'Fond de chaque écran'],
+    ['surface', '#FFFFFF', 'Cartes, champs, bulles du tuteur', INK, 'avec le texte', 'Carte de leçon'],
+    ['border', '#E3D9C8', 'Séparateurs et bords décoratifs', null, '', 'Bord de carte'],
+    ['border-strong', '#8C8172', 'Bords des champs et boutons secondaires', BG, 'sur le fond', 'Contour de champ de saisie'],
+    ['text', '#2B2118', 'Texte principal, brun café', BG, 'sur le fond', 'Traduction française'],
+    ['text-secondary', '#65594E', 'Légendes, compteurs, aides', BG, 'sur le fond', '« 6 / 10 phrases »'],
+    ['text-disabled', '#A39A8E', 'Éléments désactivés, exemptés par WCAG', BG, 'sur le fond', 'Bouton « Valider » inactif'],
+  ]);
+  const DS = '#1E2526', DB = '#14191A';
+  palette('pal-dark', [
+    ['bg', '#14191A', 'Fond sombre, nuit sur la mer', '#F3EEE6', 'avec le texte', 'Fond de chaque écran'],
+    ['surface', '#1E2526', 'Cartes et champs', '#F3EEE6', 'avec le texte', 'Carte de leçon'],
+    ['border', '#364042', 'Séparateurs', null, '', 'Bord de carte'],
+    ['border-strong', '#7C8789', 'Bords des champs', DS, 'sur les cartes', 'Contour de champ'],
+    ['text', '#F3EEE6', 'Texte principal', DB, 'sur le fond', 'Traduction'],
+    ['text-secondary', '#B4ADA2', 'Légendes', DS, 'sur les cartes', 'Compteurs'],
+    ['text-disabled', '#6B7476', 'Désactivé, exempté', DS, 'sur les cartes', 'Bouton inactif'],
+    ['primary', '#4FC3CF', 'Action principale, texte foncé #06282C dessus', '#06282C', 'avec son texte', 'Bouton « Commencer »'],
+    ['primary-dark', '#2C8E99', 'Bord inférieur des boutons', null, '', 'Relief'],
+    ['secondary (tuile)', '#F08A70', 'Micro, série', '#2B120B', 'avec son texte', 'Bouton micro'],
+    ['accent (soleil)', '#F5C563', 'Focus, « Réessayer »', DS, 'sur les cartes', 'Anneau de focus'],
+    ['success', '#6FCF97', 'Réponse juste', DS, 'sur les cartes', 'Bandeau de réussite'],
+    ['error', '#FF8A9A', 'Erreur', DS, 'sur les cartes', 'Message d’erreur'],
+    ['warning', '#F2C14E', 'Avertissement', DS, 'sur les cartes', 'Bandeau'],
+    ['info', '#7FB6F0', 'Conseils', DS, 'sur les cartes', 'Note'],
+  ]);
+  palette('pal-sem', [
+    ['level-beginner', '#2B7A4B', 'Niveau débutant', BG, 'sur le fond', 'Pastille de niveau'],
+    ['level-intermediate', '#1F5FA8', 'Niveau intermédiaire', BG, 'sur le fond', 'Pastille de niveau'],
+    ['level-advanced', '#7B3FA0', 'Niveau avancé', BG, 'sur le fond', 'Pastille de niveau'],
+    ['cat-salutations', '#B8452F', 'Leçon Salutations', BG, 'sur le fond', 'Icône de la leçon'],
+    ['cat-politesse', '#1F5FA8', 'Leçon Politesse', BG, 'sur le fond', 'Icône de la leçon'],
+    ['cat-presentation', '#0D6E7A', 'Leçon Se présenter', BG, 'sur le fond', 'Icône de la leçon'],
+    ['cat-expressions', '#7B3FA0', 'Leçon Expressions', BG, 'sur le fond', 'Icône de la leçon'],
+    ['cat-cafe', '#7A4E2A', 'Leçon Café et restaurant', BG, 'sur le fond', 'Icône de la leçon'],
+    ['cat-chiffres', '#8A5A00', 'Leçon Chiffres', BG, 'sur le fond', 'Icône de la leçon'],
+    ['state-success', '#2B7A4B', 'Réponse juste, avec icône coche', BG, 'sur le fond', 'Bandeau de retour'],
+    ['state-error', '#B3243E', 'Erreur, avec icône alerte', BG, 'sur le fond', 'Bandeau de retour'],
+    ['state-progress', '#0D6E7A', 'En cours, barre partiellement remplie', BG, 'sur le fond', 'Barre de progression'],
+    ['state-locked', '#8C8172', 'Verrouillé, avec icône cadenas', BG, 'sur le fond', 'Leçon non débloquée'],
+    ['state-done', '#2B7A4B', 'Terminé, avec coche pleine', BG, 'sur le fond', 'Leçon finie'],
+  ]);
+
+  table('comp-table', ['Composant', 'Usage et variantes', 'États et comportement', 'Accessibilité'], [
+    ['Bouton primaire / secondaire / tertiaire', 'Une seule action primaire par écran ; secondaire en contour ; tertiaire en texte souligné', 'Défaut, survol, focus, pressé, désactivé, chargement. Pleine largeur sur mobile', 'Élément button, libellé verbe'],
+    ['Bouton icône', 'Actions répétées : lecture, répéter, ralentir, traduction', 'Rond de 56 px ; version pleine pour la lecture', 'aria-label obligatoire'],
+    ['Bouton lecture audio', 'Écouter une phrase', 'Repos, chargement (onde), lecture (icône pause), erreur (toast)', '« Écouter : sa7ten »'],
+    ['Bouton micro / enregistrement', 'Parler ; devient « arrêter » pendant l’enregistrement', '72 px, tuile ; en cours : framboise, halo pulsé, carré d’arrêt ; refus du micro : message', 'aria-pressed, Espace pour démarrer et arrêter'],
+    ['Boutons répéter, ralentir, traduction', 'Aides autour d’une phrase', 'Ralentir et traduction sont des bascules', 'aria-pressed sur les bascules'],
+    ['Carte de leçon', 'Liste et parcours', 'Disponible, en cours (barre), terminée (coche), verrouillée (cadenas, grisée)', 'Toute la carte est un lien ; état lu à voix haute'],
+    ['Carte de vocabulaire', 'Phrase avec arabe, translittération, français, note', 'Version compacte dans les listes', 'Arabe marqué lang et dir'],
+    ['Flashcard audio', 'Révision : français d’abord, réponse révélée', 'Face question, face réponse, trois notes', 'Révélation par bouton, pas par geste seul'],
+    ['Barre et cercle de progression', 'Leçon, objectifs ; cercle pour le total du jour', 'Remplissage animé en 400 ms', 'role progressbar avec valeurs'],
+    ['Série, badge, niveau', 'Motivation', 'Série : active, en danger (contour soleil), perdue (grise)', 'Texte complet : « 4 jours d’affilée »'],
+    ['Liste de leçons', 'Cartes empilées ; grille de 2 ou 3 sur bureau', 'Chargement en squelettes', 'Liste ul'],
+    ['Écrans leçon, répétition, chatbot', 'Gabarits : en-tête avec progression, contenu centré, action en bas', 'Voir les fiches d’écrans', 'Titre h1 unique'],
+    ['Bulles de dialogue', 'Tuteur à gauche sur carte ; utilisateur à droite en bleu volet', 'En cours d’écriture : trois points ; en lecture : contour soleil', 'Auteur annoncé avant le texte'],
+    ['Transcription et sous-titres', 'Texte de tout audio ; sous-titres sous la bulle en cours', 'Mot en cours surligné si disponible', 'Zone aria-live polie'],
+    ['Feedback et score de prononciation', 'Deux parties : ce qui a été compris, réécoute comparée', 'Réussi, proche, à retravailler ; jamais de note inventée', 'role status, icône et texte'],
+    ['Messages de succès et d’erreur', 'Bandeaux colorés avec icône', 'L’erreur dit quoi faire', 'role status ou alert'],
+    ['Modale', 'Confirmation d’une action destructive seulement', 'Fond assombri, entrée en 250 ms', 'Focus enfermé, Échap pour fermer'],
+    ['Toast', 'Confirmation brève, 5 secondes', 'En bas, au-dessus de la barre', 'role status'],
+    ['Barre du bas, en-tête, onglets', 'Quatre destinations au plus ; onglets pour filtrer', 'Onglet actif : icône pleine et trait', 'nav, aria-current'],
+    ['Formulaire, champ, sélecteur, interrupteur', 'Réglages', 'Défaut, focus, erreur avec message sous le champ', 'label lié, role switch'],
+    ['Squelette, état vide, hors-ligne', 'Attente, absence de contenu, pas de réseau', 'Hors-ligne : bandeau et fonctions vocales grisées', 'Message texte, jamais d’icône seule'],
+  ]);
+
+  table('btn-table', ['Bouton', 'Fond', 'Texte', 'Bord inférieur', 'Icône', 'Remarque'], [
+    ['Principal', 'primary #0D6E7A', 'Blanc', 'primary-dark #09525B', 'Facultative, à gauche', 'Un seul par écran'],
+    ['Secondaire', 'surface', 'primary', 'border-strong', '—', 'Pour l’alternative'],
+    ['Tertiaire', 'Transparent', 'primary, souligné', 'Aucun', '—', 'Actions discrètes'],
+    ['Destructif', 'surface', 'error', 'error', '—', 'Toujours suivi d’une confirmation'],
+    ['Désactivé', 'surface-2', 'text-disabled', 'border, sans relief', '—', 'Raison écrite à côté'],
+    ['Lecture audio', 'primary, rond 56 px', 'Blanc', 'primary-dark', 'Triangle plein', 'Devient pause pendant la lecture'],
+    ['Micro', 'tuile #B8452F, rond 72 px', 'Blanc', 'tuile foncée #8E3120', 'Micro', 'Le plus gros bouton de l’écran oral'],
+    ['Enregistrement', 'error', 'Blanc', '—', 'Carré d’arrêt', 'Halo pulsé de 1,4 s'],
+    ['Validation / Continuer', 'success #2B7A4B', 'Blanc', 'Vert foncé', 'Coche', 'Apparaît après une réponse juste'],
+    ['Répéter', 'surface, rond 56 px', 'primary', 'border-strong', 'Flèches en boucle', 'Rejoue le modèle'],
+    ['Réessayer', 'soleil #F2B441', 'Brun #2B2118', 'soleil foncé #C98A12', 'Flèches en boucle', 'Jamais rouge : réessayer n’est pas une faute'],
+  ]);
+
+  table('anim-table', ['Animation', 'Déclencheur', 'Durée et courbe', 'Transformation', 'But'], [
+    ['Apparition des cartes', 'Arrivée sur un écran', '250 ms, ease-out, décalage de 40 ms', 'Fondu et montée de 8 px', 'Donner un ordre de lecture'],
+    ['Transition entre phrases', '« Continuer »', '200 ms, ease-out', 'Glissement de 24 px vers la gauche', 'Sentir qu’on avance'],
+    ['Validation', 'Réponse juste', '300 ms, rebond léger', 'Coche qui se dessine, bandeau vert qui monte', 'Récompense immédiate'],
+    ['Erreur', 'Réponse à retravailler', '250 ms, ease-out', 'Bandeau qui monte ; aucune secousse', 'Rassurer : pas de punition visuelle'],
+    ['Réussite de leçon', 'Dernière phrase', '400 ms, rebond', 'Rakwi monte, vapeur en cœur', 'Le moment festif de la session'],
+    ['Série', 'Premier objectif du jour atteint', '400 ms, rebond', 'Flamme à 1,2 fois sa taille, chiffre qui change', 'Ancrer l’habitude'],
+    ['Lecture audio', 'Appui sur lecture', 'Boucle de 900 ms', 'Cinq barres qui ondulent', 'Montrer que le son joue'],
+    ['Enregistrement', 'Appui sur micro', 'Halo de 1,4 s en boucle', 'Halo framboise autour du bouton', 'Signaler clairement que le micro écoute'],
+    ['Onde du micro', 'Voix détectée', 'Temps réel', 'Hauteur des barres selon le volume', 'Confirmer qu’on est entendu'],
+    ['Feedback de prononciation', 'Fin de l’analyse', '300 ms, ease-out', 'Texte compris révélé, puis jauge', 'Lire avant de juger'],
+    ['Mascotte', 'Accueil, vide, réussite, erreur', 'Vapeur en boucle de 3 s', 'Volutes qui ondulent', 'Présence calme'],
+    ['Boutons', 'Pression', '80 ms, ease-out', 'Descente de 3 px', 'Sensation tactile'],
+    ['Chargement', 'Attente de plus de 300 ms', 'Boucle de 1,2 s', 'Squelettes qui pulsent doucement', 'Éviter l’écran vide'],
+    ['Transition de page', 'Navigation', '150 ms', 'Fondu simple', 'Rester rapide'],
+    ['Progression', 'Objectif mis à jour', '400 ms, ease-out', 'Barre qui se remplit', 'Voir l’effet de son effort'],
+  ]);
+
+  // [numéro, nom, existe ?, objectif, contenu, actions, composants, particularités]
+  const screens = [
+    [1, 'Écran d’accueil', 1, 'Lancer la session du jour en un geste', 'Salutation, bouton principal, objectifs, phrases à réviser', 'Commencer ; Leçons, Conversation, Révisions', 'En-tête, série, barres, cartes', 'Voir la maquette localhost'],
+    [2, 'Onboarding', 0, 'Expliquer en trois écrans : écouter, répéter, réviser', 'Rakwi, une phrase par écran', 'Suivant ; Passer', 'Illustration, points de progression', 'Demande l’accès au micro au moment où il sert, avec explication'],
+    [3, 'Choix du niveau', 0, 'Adapter le point de départ', 'Trois cartes : débutant, quelques mots, je me débrouille', 'Choisir ; modifiable dans les réglages', 'Cartes à choix unique', 'Couleurs de niveau ; choix annoncé au lecteur d’écran'],
+    [4, 'Choix de l’objectif', 0, 'Fixer une durée par jour', '5, 10 ou 15 minutes', 'Choisir', 'Cartes à choix unique', '5 minutes proposé par défaut'],
+    [5, 'Tableau de bord', 1, 'Vue de la journée', 'Identique à l’accueil sur mobile ; plus large sur bureau', 'Commencer, réviser', 'Cercle de progression, série', 'Deux colonnes sur bureau'],
+    [6, 'Parcours d’apprentissage', 0, 'Voir le chemin des leçons', 'Leçons en colonne reliées par un trait, sous forme d’arches', 'Ouvrir une leçon', 'Carte de leçon, états verrouillé / en cours / terminé', 'La leçon en cours est centrée à l’ouverture'],
+    [7, 'Leçon', 1, 'Découvrir les phrases d’un thème', 'Phrase en grand, audio, note d’usage', 'Écouter, lent, suivant', 'Carte de vocabulaire, barre de progression en en-tête', 'Une phrase à la fois sur mobile ; liste à gauche sur bureau'],
+    [8, 'Vocabulaire', 1, 'Retrouver toutes les phrases apprises', 'Liste filtrable par leçon, champ de recherche', 'Écouter, ajouter aux révisions', 'Cartes compactes, onglets', 'Recherche en français et en translittération'],
+    [9, 'Flashcard audio', 1, 'Tester sa mémoire à l’oral', 'Français, puis réponse révélée avec audio', 'Voir la réponse ; À revoir, Correct, Facile', 'Flashcard, trois boutons', 'La carte se retourne en 250 ms ; fondu simple si animations réduites'],
+    [10, 'Compréhension orale', 0, 'Reconnaître une phrase entendue', 'Bouton d’écoute, trois traductions possibles', 'Écouter, choisir, vérifier', 'Bouton audio, cartes à choix, bandeau de retour', 'Transcription affichée après la réponse'],
+    [11, 'Répétition orale', 1, 'Dire la phrase à voix haute', 'Phrase, modèle audio, grand micro', 'Écouter, parler, réessayer', 'Micro 72 px, onde', 'Le micro est au pouce, en bas de l’écran'],
+    [12, 'Enregistrement', 1, 'Montrer que le micro écoute', 'Onde en direct, durée, bouton d’arrêt', 'Arrêter ; annuler', 'Bouton enregistrement, onde', 'Arrêt automatique après 15 secondes'],
+    [13, 'Feedback de prononciation', 1, 'Comprendre ce qui a été entendu', '« On a compris : … », jauge de ressemblance, les deux lecteurs audio côte à côte', 'Réessayer ; Continuer', 'Bandeau de retour, lecteurs, jauge', 'Pas de note par son : Azure ne le fait pas pour le libanais'],
+    [14, 'Préparation orale', 0, 'Se préparer avant une conversation', 'Les 4 ou 5 phrases utiles du scénario', 'Écouter chacune ; C’est parti', 'Cartes compactes', 'Écran court, sans exercice'],
+    [15, 'Scénario conversationnel', 1, 'Jouer un dialogue écrit', 'Bulles A et B, réplique en cours mise en avant', 'Écouter tout ; jouer le rôle B au micro', 'Bulles, sous-titres, micro', 'Choix du rôle en haut de l’écran'],
+    [16, 'Chatbot vocal', 0, 'Converser librement avec un tuteur', 'Fil de bulles, micro en bas, bouton « aide-moi »', 'Parler ; voir la traduction ; ralentir', 'Bulles, transcription, micro', 'Demande un service d’IA à vérifier ; voir les questions'],
+    [17, 'Traduction', 0, 'Demander « comment dit-on… ? »', 'Champ en français, résultat en trois lignes avec audio', 'Traduire ; ajouter aux révisions', 'Champ, carte de vocabulaire', 'Résultat marqué « proposé par l’IA, à vérifier »'],
+    [18, 'Révision', 1, 'Revoir les cartes dues', 'Compteur, flashcards à la suite', 'Noter chaque carte', 'Flashcard, barre', 'Écran de fin avec le nombre de cartes revues'],
+    [19, 'Progression', 0, 'Voir le chemin parcouru', 'Phrases apprises, jours actifs sur 4 semaines, leçons terminées', 'Aucune action principale', 'Cercle, calendrier de points, liste', 'Chiffres en grand, peu de graphiques'],
+    [20, 'Profil', 0, 'Résumé personnel', 'Prénom, niveau, objectif, badges', 'Modifier', 'Badges, pastille de niveau', 'Peut fusionner avec Progression'],
+    [21, 'Paramètres', 1, 'Régler la voix et l’affichage', 'Clé Azure, voix, vitesse, thème, anglais', 'Enregistrer et tester ; effacer la clé', 'Formulaire, interrupteurs', 'La clé est masquée ; rappel de l’endroit où elle est stockée'],
+    [22, 'Hors-ligne', 0, 'Dire ce qui reste possible sans réseau', 'Rakwi, « Pas de connexion. Tu peux réviser les phrases déjà écoutées. »', 'Réviser ; réessayer', 'État vide, bandeau', 'Les boutons vocaux sont grisés avec explication'],
+    [23, 'Erreur', 0, 'Expliquer et proposer une sortie', 'Ce qui s’est passé, quoi faire', 'Réessayer ; retour à l’accueil', 'Message d’erreur', 'Jamais de code technique seul'],
+    [24, 'Succès', 0, 'Fêter la fin d’une session', 'Rakwi, « 5 phrases dites à voix haute », objectifs cochés', 'Continuer', 'Illustration, liste cochée', 'Le seul écran avec une animation festive'],
+    [25, 'Série', 0, 'Montrer la régularité', 'Flamme, nombre de jours, semaine en sept points', 'Fermer', 'Série, calendrier de points', 'Une série perdue affiche « On reprend aujourd’hui ? », sans reproche'],
+  ];
+  const host = document.getElementById('screens');
+  screens.forEach(([n, name, exists, goal, content, actions, comps, special]) => {
+    const card = el('div', null, 'screen');
+    const h = el('h4', n + '. ' + name);
+    h.append(el('span', exists ? 'Existe' : 'Nouveau', 'tag ' + (exists ? 'done' : 'new')));
+    const dl = el('dl');
+    [['Objectif', goal], ['Contenu', content], ['Actions', actions], ['Composants', comps], ['Particularité', special]].forEach(([k, v]) => dl.append(el('dt', k), el('dd', v)));
+    card.append(h, dl);
+    host.append(card);
+  });
+
+  document.getElementById('code-comp').textContent = [
+    '/* Bouton principal tactile */',
+    '<button class="inline-flex h-13 items-center justify-center gap-2 rounded-2xl',
+    '  border-2 border-b-[5px] border-primary border-b-primary-dark bg-primary px-5',
+    '  font-display font-semibold text-white transition-transform duration-75',
+    '  hover:brightness-105 active:translate-y-[3px] active:border-b-2',
+    '  focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-soleil',
+    '  disabled:border-border disabled:bg-surface-2 disabled:text-disabled">',
+    '  Commencer',
+    '</button>',
+    '',
+    '/* Bouton micro */',
+    '<button aria-label="Parler" aria-pressed="false"',
+    '  class="grid size-18 place-items-center rounded-full border-2 border-b-[5px]',
+    '  border-tuile-dark bg-tuile text-white active:translate-y-[3px] active:border-b-2',
+    '  aria-pressed:animate-pulse aria-pressed:bg-error">…</button>',
+    '',
+    '/* Carte de phrase */',
+    '<article class="rounded-3xl border-2 border-border bg-surface p-5 text-center">',
+    '  <p lang="ar" dir="rtl" class="font-ar text-[34px] leading-[1.7] font-bold">صحتين</p>',
+    '  <p class="font-display text-lg font-semibold text-primary">sa7ten</p>',
+    '  <p class="text-text">Bon appétit</p>',
+    '</article>',
+  ].join('\n');
+
+  document.getElementById('code-home').textContent = [
+    '/* app/globals.css : les tokens Ahla */',
+    '@import "tailwindcss";',
+    '@theme {',
+    '  --color-bg: #FAF5EC;          --color-surface: #FFFFFF;      --color-surface-2: #F3ECDF;',
+    '  --color-border: #E3D9C8;      --color-border-strong: #8C8172;',
+    '  --color-text: #2B2118;        --color-text-2: #65594E;       --color-disabled: #A39A8E;',
+    '  --color-primary: #0D6E7A;     --color-primary-dark: #09525B; --color-primary-light: #D9F0F2;',
+    '  --color-tuile: #B8452F;       --color-tuile-dark: #8E3120;   --color-soleil: #F2B441;',
+    '  --color-success: #2B7A4B;     --color-error: #B3243E;',
+    '  --font-display: "Readex Pro", system-ui, sans-serif;',
+    '  --font-body: "Figtree", system-ui, sans-serif;',
+    '  --font-ar: "Noto Naskh Arabic", serif;',
+    '}',
+    '',
+    '// app/page.tsx',
+    'type Goal = { label: string; done: number; total: number };',
+    'type Phrase = { id: string; translit: string; fr: string };',
+    '',
+    'const goals: Goal[] = [',
+    '  { label: "Écouter 5 phrases", done: 5, total: 5 },',
+    '  { label: "Répéter 3 phrases à voix haute", done: 1, total: 3 },',
+    '  { label: "Réviser 8 cartes", done: 0, total: 8 },',
+    '];',
+    'const toReview: Phrase[] = [',
+    '  { id: "exp-8", translit: "sa7ten", fr: "Bon appétit" },',
+    '  { id: "pol-2", translit: "yislamo", fr: "Merci (familier)" },',
+    '];',
+    'const links = [',
+    '  { href: "/lecons", title: "Leçons", hint: "6 thèmes" },',
+    '  { href: "/conversation", title: "Conversation", hint: "Parler avec le tuteur" },',
+    '  { href: "/revision", title: "Révisions", hint: "8 cartes" },',
+    '  { href: "/progression", title: "Progression", hint: "23 phrases apprises" },',
+    '];',
+    '',
+    'export default function Home() {',
+    '  return (',
+    '    <main className="mx-auto grid max-w-5xl gap-6 bg-bg p-4 font-body text-text lg:grid-cols-2 lg:p-8">',
+    '      <header className="flex items-center justify-between lg:col-span-2">',
+    '        <span className="font-display text-2xl font-bold text-primary">ahla</span>',
+    '        <a href="/serie" className="rounded-full border-2 border-border bg-surface px-4 py-1.5 font-display font-bold text-tuile">',
+    '          4 jours <span className="sr-only">d’affilée</span>',
+    '        </a>',
+    '      </header>',
+    '',
+    '      <section className="grid content-start gap-5">',
+    '        <div>',
+    '          <h1 className="font-display text-2xl font-semibold">Ahla ! On parle 5 minutes ?</h1>',
+    '          <p className="text-text-2">8 phrases t’attendent aujourd’hui.</p>',
+    '        </div>',
+    '        <a href="/session" className="flex h-13 items-center justify-center rounded-2xl border-2 border-b-[5px] border-primary border-b-primary-dark bg-primary font-display font-semibold text-white active:translate-y-[3px] active:border-b-2 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-soleil">',
+    '          Commencer la session du jour',
+    '        </a>',
+    '        <div>',
+    '          <h2 className="font-display font-semibold">Objectifs du jour</h2>',
+    '          <ul className="mt-2 grid gap-3">',
+    '            {goals.map((g) => (',
+    '              <li key={g.label} className="grid grid-cols-[1fr_auto] gap-1 text-sm">',
+    '                <span>{g.label}</span>',
+    '                <span className="text-text-2 tabular-nums">{g.done} / {g.total}</span>',
+    '                <div role="progressbar" aria-label={g.label} aria-valuenow={g.done} aria-valuemin={0} aria-valuemax={g.total}',
+    '                  className="col-span-2 h-3 overflow-hidden rounded-full border border-border bg-surface-2">',
+    '                  <div className={g.done === g.total ? "h-full rounded-full bg-success" : "h-full rounded-full bg-primary"}',
+    '                    style={{ width: (100 * g.done) / g.total + "%" }} />',
+    '                </div>',
+    '              </li>',
+    '            ))}',
+    '          </ul>',
+    '        </div>',
+    '      </section>',
+    '',
+    '      <section className="grid content-start gap-5">',
+    '        <div>',
+    '          <h2 className="font-display font-semibold">À réviser</h2>',
+    '          {toReview.length === 0 ? (',
+    '            <p className="mt-2 text-text-2">Rien à réviser pour l’instant. Commence une leçon pour remplir tes révisions.</p>',
+    '          ) : (',
+    '            <ul className="mt-2 grid gap-2">',
+    '              {toReview.map((p) => (',
+    '                <li key={p.id} className="flex items-center gap-3 rounded-2xl border border-border bg-surface px-3 py-2">',
+    '                  <button aria-label={"Écouter : " + p.translit} className="grid size-11 place-items-center rounded-full bg-primary text-white">▶</button>',
+    '                  <div>',
+    '                    <b className="block font-display font-semibold text-primary">{p.translit}</b>',
+    '                    <span className="text-sm text-text-2">{p.fr}</span>',
+    '                  </div>',
+    '                </li>',
+    '              ))}',
+    '            </ul>',
+    '          )}',
+    '        </div>',
+    '        <nav aria-label="Sections" className="grid grid-cols-2 gap-3">',
+    '          {links.map((l) => (',
+    '            <a key={l.href} href={l.href} className="rounded-2xl border-2 border-b-[5px] border-border bg-surface p-3 font-display font-semibold">',
+    '              {l.title}',
+    '              <small className="block font-body font-normal text-text-2">{l.hint}</small>',
+    '            </a>',
+    '          ))}',
+    '        </nav>',
+    '      </section>',
+    '    </main>',
+    '  );',
+    '}',
+  ].join('\n');
+})();
+</script>
