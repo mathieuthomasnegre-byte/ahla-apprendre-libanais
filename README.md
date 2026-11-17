@@ -4,7 +4,7 @@ Application web personnelle pour apprendre le libanais parlé : leçons d'expres
 
 ## Lancer l'application
 
-Prérequis : Node.js 18 ou plus récent.
+Prérequis : Node.js 22 ou plus récent.
 
 ```bash
 npm start
